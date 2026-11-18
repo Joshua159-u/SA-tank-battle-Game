@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tank Battle – South African Forces</title>
+  <script type="module" crossorigin src="/SA-tank-battle-game/assets/index-MoBkEYTR.js"></script>
+  <link rel="stylesheet" crossorigin href="/SA-tank-battle-game/assets/index-ArNYfyMC.css">
+</head>
+<body class="hangar">
+<canvas id="gl"></canvas>
+
+<!-- ═════════════ HANGAR ═════════════ -->
+<div id="top" class="hg">
+  <button id="menuBtn" class="tb">☰</button>
+  <span class="tb lbl">Battles</span>
+  <span class="tb lbl" id="helpBtn">Controls</span>
+  <div id="pwrap"><span id="pname">- Commander -</span><span id="lvl">1</span></div>
+  <div id="battleWrap"><button id="toBattle" type="button"><span class="battle-main">To Battle!</span></button><button id="modePicker" type="button" aria-haspopup="menu" aria-expanded="false">GROUND REALISTIC BATTLES ▾</button><div id="battleModeMenu" class="battle-mode-menu" role="menu" hidden><button type="button" role="menuitemradio" data-mode="realistic" aria-checked="true">Ground Realistic Battles · Teams</button><button type="button" role="menuitemradio" data-mode="wave" aria-checked="false">Wave Mode · Co-op</button></div></div>
+  <div id="money"><span>🪙 <b id="sl">0</b></span><span>🔬 <b id="rpTop">0</b></span></div>
+</div>
+
+<div id="info" class="hg panel"></div>
+<button id="infoRestore" class="info-restore" type="button" title="Show vehicle information" aria-label="Show vehicle information">▶</button>
+
+<div id="rpanel" class="hg">
+  <div class="card" id="resCard"></div>
+  <div class="card" id="camoCard"></div>
+</div>
+
+<div id="bottom" class="hg">
+  <div id="resRow"><button id="resTab">︽ Research ︽</button><div id="nats"></div></div>
+  <div id="slots"></div>
+  <div id="presetBar"><div id="cats"></div><div id="presets"></div><button id="presetBtn" class="pb">⇅ Presets</button></div>
+</div>
+
+<div id="tree" class="panel">
+  <div class="treeHead"><div id="treeTabs"></div><span id="treeInfo"></span><button id="treeClose" class="pb">✖</button></div>
+  <div id="treeBody"></div>
+</div>
+
+<div id="presetMenu" class="panel pop"></div>
+<div id="menu" class="panel pop">
+  <button data-m="name">✏ Change player name</button>
+  <button data-m="help">⌨ Controls</button>
+  <button data-m="sound" id="sndBtn">🔊 Sound: on</button>
+  <label class="vol">Volume <input type="range" id="sndVol" min="0" max="100"></label>
+  <label class="quality">Graphics quality <select id="qualitySelect"><option value="low">Low · performance</option><option value="medium">Medium</option><option value="high">High</option><option value="ultra">Ultra · demanding</option></select></label>
+  <button data-m="reset" style="color:#fca5a5">⚠ Reset all progress</button>
+</div>
+
+<!-- inspection (double-click the vehicle) -->
+<div id="insp">
+  <div id="inspName"></div>
+  <div id="inspBar"><button data-v="off">◻ Off</button><button data-v="armor">⬢ Armor</button><button data-v="xray">◎ X-Ray</button></div>
+  <div id="attacker" class="panel"><b>Protection analysis · attacker</b><select id="aNat"></select><select id="aVeh"></select><select id="aAmmo"></select><small>Hover the armor to see thickness and angle. Click to fire a test shot: a separate Penetration X-Ray appears for 3 seconds, then returns to your selected view.</small></div>
+  <div id="inspHelp">Drag to rotate · scroll to zoom · hover a part for its specifications · Esc to exit</div>
+  <button id="inspExit" class="pb">✖ Exit</button>
+  <div id="shotRes" class="panel"></div>
+</div>
+<div id="tip"></div><div id="xh"></div>
+
+<!-- ═════════════ DEPLOY ═════════════ -->
+<div id="deploy">
+  <div class="panel" id="dLeft"><div id="dInfo"></div><div id="dMapSel"><b>Map</b> <select id="dMapPick"></select></div><div id="dAirSpawn" aria-hidden="true"></div><h3 id="dTitle">Choose a vehicle</h3><div id="dSlots"></div><h4>Ammunition</h4><div id="dLoad"></div></div>
+  <div class="panel" id="dRight"><div id="dSpawnTxt">Click a spawn point on the map</div><canvas id="dMap" width="560" height="560"></canvas></div>
+  <div id="dBtns"><button id="dBack" class="pb">Back to hangar</button><button id="dGo">▶ Deploy</button></div>
+</div>
+
+<!-- ═════════════ MAP INTRO ═════════════ -->
+<div id="mapIntro" aria-live="polite">
+  <div id="mapIntroTop">
+    <div class="mi-brand"><span>SA</span> TANK BATTLE</div>
+    <div class="mi-top-meta">TACTICAL OPERATIONS <i></i> BATTLEFIELD BRIEFING</div>
+  </div>
+  <div id="mapIntroCard">
+    <section id="mapIntroMapPane">
+      <div class="mi-pane-head"><b>TACTICAL AREA MAP</b><span>GRID / SPAWN OVERVIEW</span></div>
+      <canvas id="mapIntroMap" width="560" height="560"></canvas>
+    </section>
+    <section id="mapIntroBrief">
+      <div class="mi-kicker">OPERATIONAL BRIEFING</div>
+      <div class="mi-classified">FIELD INTELLIGENCE · SOUTH AFRICAN FORCES</div>
+      <h1 id="mapIntroName">Loading map…</h1>
+      <p id="mapIntroDesc">Surveying the terrain, objective areas and marked deployment lanes.</p>
+      <div class="mi-brief-rule"></div>
+      <div class="mi-brief-row"><span>SELECTED VEHICLE</span><b id="mapIntroVehicle">—</b></div>
+      <div class="mi-brief-row"><span>BATTLE TYPE</span><b id="mapIntroMode">—</b></div>
+      <div class="mi-brief-row"><span>DEPLOYMENT</span><b>FIXED SPAWN LANES</b></div>
+      <div class="mi-brief-note">Choose your vehicle and spawn position after the battlefield briefing.</div>
+    </section>
+  </div>
+  <div id="mapIntroFooter">
+    <div class="mi-loading-icon"></div>
+    <p id="mapIntroStatus">PREPARING TERRAIN, OBJECTIVES AND SPAWN LANES</p>
+    <div id="mapIntroTrack"><div id="mapIntroFill"></div></div>
+    <b class="mi-loading-word">LOADING</b>
+  </div>
+</div>
+
+<!-- ═════════════ BATTLE ═════════════ -->
+<div id="bhud">
+  <canvas id="ov"></canvas>
+  <div id="bleft"><div id="bstate"></div></div><div id="bammo"></div><div id="kcam"><b id="kcreason">Destroyed</b><span id="kctxt"></span></div><div id="kcskip"><kbd>Space</kbd> Skip<small>Move the mouse to look around · scroll to zoom</small></div>
+  <div id="bspd"></div><div id="bscore"></div><div id="bcaps"></div>
+  <div id="bmsg"></div><div id="brep"></div><div id="blog"></div>
+  <canvas id="mini" width="280" height="280"></canvas>
+  <canvas id="dmg" width="250" height="230"></canvas>
+  <div id="hitcam"><div class="hch"><b>HIT CAMERA · X-RAY</b><span id="hcname"></span></div><div id="hcview"></div><div id="hctxt"></div></div>
+  <div id="fullmap"><canvas id="fullc" width="900" height="900"></canvas></div>
+  <div
+   id="over"><b id="oreason"></b><span id="osum"></span><div class="row"><button id="oNext" class="pb">Choose another vehicle</button><button id="oHangar" class="pb">Return to hangar</button></div></div>
+  <div id="pause" class="panel"><b>Paused</b><button id="pResume" class="pb">Resume (click)</button><button id="pSound" class="pb">🔊 Sound: on</button><label class="vol">Volume <input type="range" id="pVol" min="0" max="100"></label><button id="pHangar" class="pb">Leave battle → hangar</button></div>
+  <div id="bkeys">LMB main weapon · Space secondary machine gun (if fitted) · RMB/Shift sight · 1-4 shells · Ctrl missiles · F repair (hold to stop) · 6 extinguish · M map · G gear · N sound · Esc pause</div>
+</div>
+
+<div id="modal"><div class="panel"><h3 id="mTitle"></h3><div id="mBody"></div><input id="mInput" maxlength="24"><select id="mSelect"></select><div class="row"><button id="mCancel" class="pb">Cancel</button><button id="mOk" class="pb ok">OK</button></div></div></div>
+
+</body>
+</html>
